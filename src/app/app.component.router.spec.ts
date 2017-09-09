@@ -56,7 +56,12 @@ describe('AppComponent & RouterTestingModule', () => {
     expectElementOf(AboutComponent);
 
     page.expectEvents([
-      [r.NavigationStart, '/about'], [r.RoutesRecognized, '/about'],
+      [r.NavigationStart, '/about'],
+      [r.RoutesRecognized, '/about'],
+      [r.GuardsCheckStart, '/about'],
+      [r.GuardsCheckEnd, '/about'],
+      [r.ResolveStart, '/about'],
+      [r.ResolveEnd, '/about'],
       [r.NavigationEnd, '/about']
     ]);
   }));
@@ -176,7 +181,10 @@ class Page {
   }
 
   constructor() {
-    router.events.subscribe(e => this.recordedEvents.push(e));
+    router.events.subscribe(e => {
+      console.log('record route event:' + e);
+      this.recordedEvents.push(e);
+    });
     const links = fixture.debugElement.queryAll(By.directive(RouterLinkWithHref));
     this.aboutLinkDe = links[2];
     this.dashboardLinkDe = links[0];
